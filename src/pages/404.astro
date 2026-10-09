@@ -5,15 +5,15 @@ import { site, urlAbsoluta } from '../config/site';
 const canonical = urlAbsoluta('/');
 ---
 <Base
-  titulo="Pagina nao encontrada | Blog Clinica Estoque"
-  descricao="A pagina que voce procurou nao existe mais ou mudou de endereco."
+  titulo="Página não encontrada"
+  descricao="A página que você procurou não existe mais ou mudou de endereço."
   canonical={canonical}
   noindex
 >
   <div class="erro-404">
-    <h1>Pagina nao encontrada</h1>
+    <h1>Página não encontrada</h1>
     <p style="color: var(--muted);">
-      O endereco digitado nao corresponde a nenhum post do blog.
+      O endereço digitado não corresponde a nenhum post do blog.
     </p>
     <p style="margin-top: 2rem;">
       <a class="btn-cta" href={site.base + '/'}>Voltar para o blog</a>

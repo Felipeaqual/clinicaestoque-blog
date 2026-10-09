@@ -49,7 +49,7 @@ jobs:
             fi
           done <<< "${CHANGED}"
 
-          # Lista + index geral se qualquer coisa mudou.
+          # Lista geral se qualquer coisa mudou.
           if [ ${#URLS[@]} -gt 0 ]; then
             URLS+=("${BASE}/")
           fi
@@ -73,11 +73,24 @@ jobs:
 
           echo "Payload: ${JSON}"
 
-          # Endpoint principal + fallback.
-          for ENDPOINT in "https://api.indexnow.org/indexnow" "https://www.bing.com/indexnow"; do
-            echo "POST ${ENDPOINT}"
-            curl --silent --show-error --fail-with-body -X POST \
-              -H "Content-Type: application/json; charset=utf-8" \
-              -d "${JSON}" \
-              "${ENDPOINT}" || echo "Falha nao-fatal em ${ENDPOINT}"
-          done
+          # Envia so para api.indexnow.org (endpoint canonico).
+          HTTP_STATUS=$(curl --silent --show-error --output /tmp/indexnow-body -w '%{http_code}' \
+            -X POST \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "${JSON}" \
+            "https://api.indexnow.org/indexnow")
+
+          echo "Resposta HTTP: ${HTTP_STATUS}"
+          echo "Corpo:"
+          cat /tmp/indexnow-body || true
+          echo
+
+          case "${HTTP_STATUS}" in
+            200|202)
+              echo "IndexNow aceitou (${HTTP_STATUS})."
+              ;;
+            *)
+              echo "ERRO: IndexNow respondeu ${HTTP_STATUS}, falhando o job."
+              exit 1
+              ;;
+          esac

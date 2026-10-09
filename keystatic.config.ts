@@ -1,14 +1,18 @@
 import { config, collection, fields } from '@keystatic/core';
 
+const storage = import.meta.env.PROD
+  ? ({
+      kind: 'github',
+      repo: { owner: 'Felipeaqual', name: 'clinicaestoque-blog' },
+    } as const)
+  : ({ kind: 'local' } as const);
+
 export default config({
-  storage: {
-    kind: 'github',
-    repo: { owner: 'Felipeaqual', name: 'clinicaestoque-blog' },
-  },
+  storage,
   ui: {
-    brand: { name: 'Blog Clinica Estoque' },
+    brand: { name: 'Blog Clínica Estoque' },
     navigation: {
-      'Conteudo': ['posts', 'autores'],
+      'Conteúdo': ['posts', 'autores'],
     },
   },
   collections: {
@@ -22,20 +26,20 @@ export default config({
       schema: {
         titulo: fields.slug({
           name: {
-            label: 'Titulo',
-            description: 'Aparece como H1 do post, na aba do navegador e nas listas.',
+            label: 'Título',
+            description: 'Aparece como título do post, na aba do navegador e nas listas.',
             validation: { length: { min: 1, max: 120 } },
           },
           slug: {
-            label: 'Endereco (slug)',
+            label: 'Endereço (slug)',
             description:
-              'Gerado automaticamente do titulo. Pode editar. Use somente letras minusculas, numeros e hifen. Nao use acento nem espaco.',
+              'Gerado automaticamente do título. Pode editar. Use somente letras minúsculas sem acento, números e hífen. Não use espaço.',
           },
         }),
         descricaoGoogle: fields.text({
-          label: 'Descricao para o Google',
+          label: 'Descrição para o Google',
           description:
-            'Resumo que o Google e o WhatsApp mostram abaixo do titulo. Escreva entre 50 e 160 caracteres, uma frase direta sobre o que o leitor vai aprender. Esse texto nao aparece dentro do post.',
+            'Resumo que o Google e o WhatsApp mostram abaixo do título. Escreva entre 50 e 160 caracteres, uma frase direta sobre o que o leitor vai aprender. Esse texto não aparece dentro do post.',
           multiline: true,
           validation: { length: { min: 50, max: 160 } },
         }),
@@ -54,12 +58,12 @@ export default config({
           validation: { length: { min: 3, max: 180 } },
         }),
         dataPublicacao: fields.date({
-          label: 'Data de publicacao',
+          label: 'Data de publicação',
           description: 'Dia em que o post deve aparecer como publicado no blog.',
           validation: { isRequired: true },
         }),
         dataAtualizacao: fields.date({
-          label: 'Data de atualizacao',
+          label: 'Data de atualização',
           description:
             'Preencha quando reescrever ou corrigir o post. Deixe em branco se nunca atualizou.',
         }),
@@ -71,11 +75,11 @@ export default config({
         publicado: fields.checkbox({
           label: 'Publicado',
           description:
-            'Marque somente quando o post estiver pronto para ir ao ar. Posts desmarcados ficam no repositorio mas nao aparecem no blog.',
+            'Marque somente quando o post estiver pronto para ir ao ar. Posts desmarcados ficam no repositório mas não aparecem no blog.',
           defaultValue: false,
         }),
         conteudo: fields.markdoc({
-          label: 'Conteudo',
+          label: 'Conteúdo',
           options: {
             heading: [2, 3, 4],
             bold: true,
@@ -91,7 +95,7 @@ export default config({
                 alt: fields.text({
                   label: 'Texto alternativo',
                   description:
-                    'Descreva a imagem em uma frase. Obrigatorio para acessibilidade.',
+                    'Descreva a imagem em uma frase. Obrigatório para acessibilidade.',
                   validation: { length: { min: 3, max: 180 } },
                 }),
                 title: fields.text({ label: 'Legenda (opcional)' }),
@@ -116,11 +120,12 @@ export default config({
         nome: fields.slug({
           name: {
             label: 'Nome',
+            description: 'Nome que aparece embaixo do título do post. Pode conter acento.',
             validation: { length: { min: 1, max: 80 } },
           },
           slug: {
-            label: 'Endereco (slug)',
-            description: 'Use letras minusculas, numeros e hifen. Sem acento.',
+            label: 'Endereço (slug)',
+            description: 'Gerado automaticamente do nome. Use letras minúsculas sem acento, números e hífen.',
           },
         }),
         foto: fields.image({

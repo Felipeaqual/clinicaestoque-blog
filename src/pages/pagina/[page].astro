@@ -38,24 +38,24 @@ const proxima =
   paginaAtual < totalPaginas ? `${site.base}/pagina/${paginaAtual + 1}/` : null;
 ---
 <Base
-  titulo={`${site.nome} - Pagina ${paginaAtual} | Clinica Estoque`}
+  titulo={`${site.nome}: página ${paginaAtual}`}
   descricao={site.descricao}
   canonical={canonical}
   tipo="website"
 >
   <h1>{site.nome}</h1>
-  <p style="color: var(--muted);">Pagina {paginaAtual} de {totalPaginas}</p>
+  <p style="color: var(--muted);">Página {paginaAtual} de {totalPaginas}</p>
 
   <section class="lista-posts">
     {posts.map((post) => <PostCard post={post} />)}
   </section>
 
-  <nav class="paginacao" aria-label="Paginacao">
-    <a href={anterior} rel="prev">Pagina anterior</a>
+  <nav class="paginacao" aria-label="Paginação">
+    <a href={anterior} rel="prev">Página anterior</a>
     {proxima ? (
-      <a href={proxima} rel="next">Proxima pagina</a>
+      <a href={proxima} rel="next">Próxima página</a>
     ) : (
-      <span>Pagina {paginaAtual} de {totalPaginas}</span>
+      <span>Página {paginaAtual} de {totalPaginas}</span>
     )}
   </nav>
 </Base>

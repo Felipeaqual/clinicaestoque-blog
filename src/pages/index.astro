@@ -18,7 +18,7 @@ const canonical = urlAbsoluta('/');
 const descricao = site.descricao;
 ---
 <Base
-  titulo={`${site.nome} | Clinica Estoque`}
+  titulo={site.nome}
   descricao={descricao}
   canonical={canonical}
   tipo="website"
@@ -37,9 +37,9 @@ const descricao = site.descricao;
   )}
 
   {totalPaginas > 1 && (
-    <nav class="paginacao" aria-label="Paginacao">
-      <span>Pagina 1 de {totalPaginas}</span>
-      <a href={`${site.base}/pagina/2/`} rel="next">Proxima pagina</a>
+    <nav class="paginacao" aria-label="Paginação">
+      <span>Página 1 de {totalPaginas}</span>
+      <a href={`${site.base}/pagina/2/`} rel="next">Próxima página</a>
     </nav>
   )}
 </Base>

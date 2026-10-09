@@ -1,22 +1,23 @@
 export const site = {
-  nome: 'Blog Clinica Estoque',
+  nome: 'Blog Clínica Estoque',
   descricao:
-    'Guias praticos sobre controle de estoque, perdas por vencimento, compras e gestao do dia a dia de clinicas.',
+    'Guias práticos sobre controle de estoque, perdas por vencimento, compras e gestão do dia a dia de clínicas.',
   dominio: 'https://clinicaestoque.com.br',
   base: '/blog',
   idioma: 'pt-BR',
-  autorPadrao: 'Clinica Estoque',
+  autorPadrao: 'Clínica Estoque',
   publisher: {
-    nome: 'Clinica Estoque',
+    nome: 'Clínica Estoque',
     url: 'https://clinicaestoque.com.br',
-    logo: 'https://clinicaestoque.com.br/clinica-estoque-logo.svg',
+    logo: 'https://clinicaestoque.com.br/blog/android-chrome-512x512.png',
+    logoWidth: 512,
+    logoHeight: 512,
   },
   cadastroUrl: 'https://clinicaestoque.com.br/auth?tab=signup',
   cta: {
-    titulo: 'Experimente a Clinica Estoque gratis por 7 dias',
-    texto:
-      'Controle seu estoque, evite perdas por vencimento e organize a clinica em menos de 5 minutos. Sem cartao de credito.',
-    botao: 'Testar gratis',
+    titulo: 'Testar grátis por 7 dias',
+    texto: '7 dias grátis, sem cartão de crédito, cancele quando quiser.',
+    botao: 'Testar grátis por 7 dias',
   },
   postsPorPagina: 10,
   indexNowKey: 'cE2026blog9f4ab17a2ce14d9e9b4a5d2e8f1c7a06',
