@@ -1,0 +1,130 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaTesteGratis from '../components/CtaTesteGratis.astro';
+import PostCard from '../components/PostCard.astro';
+import { site, urlAbsoluta } from '../config/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => data.publicado === true);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const autor = await getEntry('autores', post.data.autor);
+
+const todos = (await getCollection('posts', ({ data }) => data.publicado === true)).sort(
+  (a, b) => b.data.dataPublicacao.getTime() - a.data.dataPublicacao.getTime(),
+);
+const relacionados = todos.filter((p) => p.id !== post.id).slice(0, 3);
+
+const canonical = urlAbsoluta(`/${post.id}/`);
+const imagemAbsoluta = new URL(post.data.imagemCapa.src, Astro.site).toString();
+
+const formatador = new Intl.DateTimeFormat('pt-BR', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'America/Sao_Paulo',
+});
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.titulo,
+  description: post.data.descricaoGoogle,
+  image: [imagemAbsoluta],
+  datePublished: post.data.dataPublicacao.toISOString(),
+  dateModified: (post.data.dataAtualizacao ?? post.data.dataPublicacao).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: autor?.data.nome ?? site.autorPadrao,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: site.publisher.nome,
+    logo: {
+      '@type': 'ImageObject',
+      url: site.publisher.logo,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonical,
+  },
+};
+---
+<Base
+  titulo={`${post.data.titulo} | ${site.nome}`}
+  descricao={post.data.descricaoGoogle}
+  canonical={canonical}
+  imagem={imagemAbsoluta}
+  imagemAlt={post.data.imagemCapaAlt}
+  tipo="article"
+  publicadoEm={post.data.dataPublicacao}
+  atualizadoEm={post.data.dataAtualizacao}
+  autor={autor?.data.nome}
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    is:inline
+  />
+
+  <article class="post">
+    <Breadcrumbs
+      itens={[
+        { nome: 'Inicio', href: site.dominio + '/' },
+        { nome: 'Blog', href: `${site.base}/` },
+        { nome: post.data.titulo },
+      ]}
+    />
+    <h1>{post.data.titulo}</h1>
+    <div class="meta-topo">
+      {autor && (
+        <span class="autor">
+          <Image
+            src={autor.data.foto}
+            alt=""
+            width={64}
+            height={64}
+            loading="eager"
+          />
+          <span>{autor.data.nome}</span>
+        </span>
+      )}
+      <time datetime={post.data.dataPublicacao.toISOString()}>
+        Publicado em {formatador.format(post.data.dataPublicacao)}
+      </time>
+      {post.data.dataAtualizacao && (
+        <time datetime={post.data.dataAtualizacao.toISOString()}>
+          Atualizado em {formatador.format(post.data.dataAtualizacao)}
+        </time>
+      )}
+    </div>
+    <Image
+      class="cover-img"
+      src={post.data.imagemCapa}
+      alt={post.data.imagemCapaAlt}
+      widths={[640, 960, 1280]}
+      sizes="(min-width: 1024px) 68ch, 100vw"
+      loading="eager"
+    />
+    <Content />
+    <CtaTesteGratis />
+  </article>
+
+  {relacionados.length > 0 && (
+    <section class="relacionados">
+      <h2>Continue lendo</h2>
+      <div class="lista-posts">
+        {relacionados.map((p) => <PostCard post={p} />)}
+      </div>
+    </section>
+  )}
+</Base>

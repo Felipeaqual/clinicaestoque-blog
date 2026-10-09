@@ -1,0 +1,71 @@
+---
+import { site } from '../config/site';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  canonical: string;
+  imagem?: string;
+  imagemAlt?: string;
+  tipo?: 'website' | 'article';
+  publicadoEm?: Date;
+  atualizadoEm?: Date;
+  autor?: string;
+  noindex?: boolean;
+}
+
+const {
+  titulo,
+  descricao,
+  canonical,
+  imagem,
+  imagemAlt,
+  tipo = 'website',
+  publicadoEm,
+  atualizadoEm,
+  autor,
+  noindex = false,
+} = Astro.props;
+
+const feedUrl = `${site.dominio}${site.base}/feed.xml`;
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{titulo}</title>
+<meta name="description" content={descricao} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content={tipo} />
+<meta property="og:site_name" content={site.nome} />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:title" content={titulo} />
+<meta property="og:description" content={descricao} />
+<meta property="og:url" content={canonical} />
+{imagem && <meta property="og:image" content={imagem} />}
+{imagem && <meta property="og:image:width" content="1200" />}
+{imagem && <meta property="og:image:height" content="630" />}
+{imagemAlt && <meta property="og:image:alt" content={imagemAlt} />}
+{autor && tipo === 'article' && <meta property="article:author" content={autor} />}
+{publicadoEm && (
+  <meta property="article:published_time" content={publicadoEm.toISOString()} />
+)}
+{atualizadoEm && (
+  <meta property="article:modified_time" content={atualizadoEm.toISOString()} />
+)}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={titulo} />
+<meta name="twitter:description" content={descricao} />
+{imagem && <meta name="twitter:image" content={imagem} />}
+{imagemAlt && <meta name="twitter:image:alt" content={imagemAlt} />}
+
+<link rel="icon" href={`${site.base}/favicon.ico`} sizes="any" />
+<link rel="icon" type="image/svg+xml" href={`${site.base}/favicon.svg`} />
+<link rel="apple-touch-icon" href={`${site.base}/apple-touch-icon.png`} />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${site.nome} - RSS`}
+  href={feedUrl}
+/>

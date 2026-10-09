@@ -1,0 +1,12 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../config/site';
+---
+<header class="site-header">
+  <div class="container">
+    <a href={site.dominio + '/'} class="logo" aria-label="Clinica Estoque">
+      <Logo variant="light" />
+    </a>
+    <a href={site.cadastroUrl} class="btn-cta" rel="noopener">{site.cta.botao}</a>
+  </div>
+</header>

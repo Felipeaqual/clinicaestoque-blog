@@ -1,0 +1,72 @@
+---
+interface Props {
+  variant?: 'light' | 'dark';
+  class?: string;
+}
+const { variant = 'light', class: className } = Astro.props;
+const textPrincipal = variant === 'light' ? '#0f172a' : '#FFFFFF';
+const textSecundario = variant === 'light' ? '#64748b' : '#CBD5E1';
+---
+<svg
+  width="260"
+  height="58"
+  viewBox="0 0 360 80"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  class={className}
+>
+  <title>Clinica Estoque</title>
+  <defs>
+    <linearGradient id="bar1-l" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+    <linearGradient id="bar2-l" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#40D87F" />
+      <stop offset="100%" stop-color="#2ECC71" />
+    </linearGradient>
+    <linearGradient id="bar3-l" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#CBD5E1" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+    <linearGradient id="plane-l" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="100%" stop-color="#3498DB" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(10, 8)">
+    <rect x="0" y="40" width="14" height="20" rx="3" fill="url(#bar1-l)" />
+    <rect x="19" y="32" width="14" height="28" rx="3" fill="url(#bar2-l)" />
+    <rect x="38" y="22" width="14" height="38" rx="3" fill="url(#bar3-l)" />
+    <g transform="translate(46, 0) scale(1.1666)">
+      <path
+        d="M3 11.5L20.5 2.5L14 19L10 13L3 11.5Z"
+        fill="url(#plane-l)"
+        stroke="url(#plane-l)"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+    </g>
+  </g>
+  <text
+    x="94"
+    y="44"
+    font-family="Figtree, system-ui, sans-serif"
+    font-size="30"
+    letter-spacing="-0.03em"
+  >
+    <tspan font-weight="400" fill={textSecundario}>Clínica</tspan>
+    <tspan font-weight="800" fill={textPrincipal}> Estoque</tspan>
+  </text>
+  <text
+    x="94"
+    y="65"
+    font-family="Figtree, system-ui, sans-serif"
+    font-size="14.5"
+    font-weight="500"
+    fill="#94A3B8"
+    letter-spacing="0.01em"
+  >Blog</text>
+</svg>

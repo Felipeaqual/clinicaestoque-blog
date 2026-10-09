@@ -1,0 +1,19 @@
+<svg viewBox="0 2.5 70 58.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bar1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#244573"/><stop offset="100%" stop-color="#1B365D"/></linearGradient>
+    <linearGradient id="bar2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#40D87F"/><stop offset="100%" stop-color="#2ECC71"/></linearGradient>
+    <linearGradient id="bar3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1F406E"/><stop offset="100%" stop-color="#132642"/></linearGradient>
+    <linearGradient id="plane" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5DADE2"/><stop offset="100%" stop-color="#2874A6"/></linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3498DB" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <g>
+     <rect x="0" y="40" width="14" height="20" rx="3" fill="url(#bar1)"/>
+     <rect x="19" y="32" width="14" height="28" rx="3" fill="url(#bar2)"/>
+     <rect x="38" y="22" width="14" height="38" rx="3" fill="url(#bar3)"/>
+     <g transform="translate(46, 0) scale(1.1666)">
+       <path d="M3 11.5L20.5 2.5L14 19L10 13L3 11.5Z" fill="url(#plane)" stroke="url(#plane)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#shadow)"/>
+     </g>
+  </g>
+</svg>

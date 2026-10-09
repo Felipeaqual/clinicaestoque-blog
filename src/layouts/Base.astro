@@ -1,0 +1,36 @@
+---
+import SeoHead from '../components/SeoHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/base.css';
+import { site } from '../config/site';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  canonical: string;
+  imagem?: string;
+  imagemAlt?: string;
+  tipo?: 'website' | 'article';
+  publicadoEm?: Date;
+  atualizadoEm?: Date;
+  autor?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+<!doctype html>
+<html lang={site.idioma}>
+  <head>
+    <SeoHead {...props} />
+    <slot name="head" />
+  </head>
+  <body>
+    <Header />
+    <main class="container">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

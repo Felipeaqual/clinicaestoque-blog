@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { site, urlAbsoluta } from '../config/site';
+
+const posts = (await getCollection('posts', ({ data }) => data.publicado === true)).sort(
+  (a, b) => b.data.dataPublicacao.getTime() - a.data.dataPublicacao.getTime(),
+);
+
+const total = posts.length;
+const paginaAtual = 1;
+const porPagina = site.postsPorPagina;
+const totalPaginas = Math.max(1, Math.ceil(total / porPagina));
+const postsPagina = posts.slice(0, porPagina);
+
+const canonical = urlAbsoluta('/');
+const descricao = site.descricao;
+---
+<Base
+  titulo={`${site.nome} | Clinica Estoque`}
+  descricao={descricao}
+  canonical={canonical}
+  tipo="website"
+>
+  <h1>{site.nome}</h1>
+  <p style="color: var(--muted); max-width: 56rem;">{descricao}</p>
+
+  {postsPagina.length === 0 ? (
+    <p style="margin-top: 2rem; color: var(--muted);">Em breve novos posts por aqui.</p>
+  ) : (
+    <section class="lista-posts">
+      {postsPagina.map((post, i) => (
+        <PostCard post={post} eager={i < 2} />
+      ))}
+    </section>
+  )}
+
+  {totalPaginas > 1 && (
+    <nav class="paginacao" aria-label="Paginacao">
+      <span>Pagina 1 de {totalPaginas}</span>
+      <a href={`${site.base}/pagina/2/`} rel="next">Proxima pagina</a>
+    </nav>
+  )}
+</Base>

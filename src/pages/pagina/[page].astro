@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { site, urlAbsoluta } from '../../config/site';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts', ({ data }) => data.publicado === true)).sort(
+    (a, b) => b.data.dataPublicacao.getTime() - a.data.dataPublicacao.getTime(),
+  );
+  const porPagina = site.postsPorPagina;
+  const totalPaginas = Math.max(1, Math.ceil(posts.length / porPagina));
+  const paginas = [];
+  for (let p = 2; p <= totalPaginas; p++) {
+    paginas.push({
+      params: { page: String(p) },
+      props: {
+        posts: posts.slice((p - 1) * porPagina, p * porPagina),
+        paginaAtual: p,
+        totalPaginas,
+      },
+    });
+  }
+  return paginas;
+}
+
+type Props = {
+  posts: Awaited<ReturnType<typeof getCollection<'posts'>>>;
+  paginaAtual: number;
+  totalPaginas: number;
+};
+
+const { posts, paginaAtual, totalPaginas } = Astro.props as Props;
+const canonical = urlAbsoluta(`/pagina/${paginaAtual}/`);
+const anterior =
+  paginaAtual === 2 ? `${site.base}/` : `${site.base}/pagina/${paginaAtual - 1}/`;
+const proxima =
+  paginaAtual < totalPaginas ? `${site.base}/pagina/${paginaAtual + 1}/` : null;
+---
+<Base
+  titulo={`${site.nome} - Pagina ${paginaAtual} | Clinica Estoque`}
+  descricao={site.descricao}
+  canonical={canonical}
+  tipo="website"
+>
+  <h1>{site.nome}</h1>
+  <p style="color: var(--muted);">Pagina {paginaAtual} de {totalPaginas}</p>
+
+  <section class="lista-posts">
+    {posts.map((post) => <PostCard post={post} />)}
+  </section>
+
+  <nav class="paginacao" aria-label="Paginacao">
+    <a href={anterior} rel="prev">Pagina anterior</a>
+    {proxima ? (
+      <a href={proxima} rel="next">Proxima pagina</a>
+    ) : (
+      <span>Pagina {paginaAtual} de {totalPaginas}</span>
+    )}
+  </nav>
+</Base>

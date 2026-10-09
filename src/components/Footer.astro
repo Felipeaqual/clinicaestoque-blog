@@ -1,0 +1,12 @@
+---
+import { site } from '../config/site';
+const ano = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div>&copy; {ano} Clinica Estoque</div>
+    <div>
+      <a href={site.dominio + '/'}>clinicaestoque.com.br</a>
+    </div>
+  </div>
+</footer>

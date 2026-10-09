@@ -1,0 +1,44 @@
+---
+import { urlAbsoluta } from '../config/site';
+
+interface Item {
+  nome: string;
+  href?: string;
+}
+
+interface Props {
+  itens: Item[];
+}
+
+const { itens } = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: itens.map((item, i) => {
+    const entry: Record<string, unknown> = {
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.nome,
+    };
+    if (item.href) {
+      entry.item = item.href.startsWith('http') ? item.href : urlAbsoluta(item.href);
+    }
+    return entry;
+  }),
+};
+---
+<nav class="breadcrumbs" aria-label="Caminho">
+  <ol>
+    {itens.map((item, i) => (
+      <li>
+        {item.href && i < itens.length - 1 ? (
+          <a href={item.href}>{item.nome}</a>
+        ) : (
+          <span aria-current={i === itens.length - 1 ? 'page' : undefined}>{item.nome}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />

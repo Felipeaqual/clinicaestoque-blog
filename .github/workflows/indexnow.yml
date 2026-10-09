@@ -1,0 +1,83 @@
+name: IndexNow
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  deployments: read
+
+jobs:
+  ping:
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment_status.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+          fetch-depth: 2
+
+      - name: Descobrir posts alterados e enviar IndexNow
+        env:
+          SHA: ${{ github.event.deployment.sha }}
+        run: |
+          set -euo pipefail
+
+          BASE="https://clinicaestoque.com.br/blog"
+          KEY="cE2026blog9f4ab17a2ce14d9e9b4a5d2e8f1c7a06"
+          KEY_LOCATION="${BASE}/${KEY}.txt"
+
+          # Diff do commit atual vs pai, filtrando mudancas em posts.
+          CHANGED=$(git diff --name-only "${SHA}^" "${SHA}" -- 'src/content/posts/*.mdoc' 2>/dev/null || true)
+
+          if [ -z "${CHANGED}" ]; then
+            echo "Nenhum post alterado neste commit. Encerrando sem ping."
+            exit 0
+          fi
+
+          URLS=()
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            [ ! -f "$f" ] && continue
+            # So envia se publicado: true no frontmatter.
+            if grep -Eq '^publicado:[[:space:]]*true' "$f"; then
+              slug=$(basename "$f" .mdoc)
+              URLS+=("${BASE}/${slug}/")
+            fi
+          done <<< "${CHANGED}"
+
+          # Lista + index geral se qualquer coisa mudou.
+          if [ ${#URLS[@]} -gt 0 ]; then
+            URLS+=("${BASE}/")
+          fi
+
+          if [ ${#URLS[@]} -eq 0 ]; then
+            echo "Posts alterados nao estao publicados. Nada a enviar."
+            exit 0
+          fi
+
+          echo "URLs a enviar:"
+          printf '  %s\n' "${URLS[@]}"
+
+          # Monta JSON payload do IndexNow.
+          JSON=$(printf '%s\n' "${URLS[@]}" | awk -v key="${KEY}" -v loc="${KEY_LOCATION}" '
+            BEGIN {
+              printf "{\"host\":\"clinicaestoque.com.br\",\"key\":\"%s\",\"keyLocation\":\"%s\",\"urlList\":[", key, loc;
+              sep=""
+            }
+            { gsub(/"/, "\\\""); printf "%s\"%s\"", sep, $0; sep="," }
+            END { print "]}" }')
+
+          echo "Payload: ${JSON}"
+
+          # Endpoint principal + fallback.
+          for ENDPOINT in "https://api.indexnow.org/indexnow" "https://www.bing.com/indexnow"; do
+            echo "POST ${ENDPOINT}"
+            curl --silent --show-error --fail-with-body -X POST \
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d "${JSON}" \
+              "${ENDPOINT}" || echo "Falha nao-fatal em ${ENDPOINT}"
+          done

@@ -1,0 +1,36 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  eager?: boolean;
+}
+
+const { post, eager = false } = Astro.props;
+const href = import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + post.id + '/';
+const data = post.data.dataPublicacao;
+const formatador = new Intl.DateTimeFormat('pt-BR', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'America/Sao_Paulo',
+});
+---
+<article class="post-card">
+  <a href={href} class="cover" aria-hidden="true" tabindex="-1">
+    <Image
+      src={post.data.imagemCapa}
+      alt=""
+      widths={[320, 480, 640, 800]}
+      sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </a>
+  <div class="corpo">
+    <div class="meta"><time datetime={data.toISOString()}>{formatador.format(data)}</time></div>
+    <a class="titulo" href={href}><h2>{post.data.titulo}</h2></a>
+    <p class="descricao">{post.data.descricaoGoogle}</p>
+  </div>
+</article>

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /blog/
+Disallow: /blog/keystatic/
+Disallow: /blog/api/
+
+Sitemap: https://clinicaestoque.com.br/blog/sitemap.xml
