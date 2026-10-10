@@ -6,7 +6,7 @@ import keystatic from '@keystatic/astro';
 
 export default defineConfig({
   site: 'https://clinicaestoque.com.br',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   output: 'static',
   adapter: vercel({
     imageService: false,
