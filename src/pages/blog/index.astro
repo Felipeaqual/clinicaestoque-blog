@@ -1,15 +1,14 @@
 ---
-import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-import { site, urlAbsoluta } from '../config/site';
+import { site, urlAbsoluta } from '../../config/site';
 
 const posts = (await getCollection('posts', ({ data }) => data.publicado === true)).sort(
   (a, b) => b.data.dataPublicacao.getTime() - a.data.dataPublicacao.getTime(),
 );
 
 const total = posts.length;
-const paginaAtual = 1;
 const porPagina = site.postsPorPagina;
 const totalPaginas = Math.max(1, Math.ceil(total / porPagina));
 const postsPagina = posts.slice(0, porPagina);
@@ -18,7 +17,7 @@ const canonical = urlAbsoluta('/');
 const descricao = site.descricao;
 ---
 <Base
-  titulo={site.nome}
+  tipoPagina="home"
   descricao={descricao}
   canonical={canonical}
   tipo="website"

@@ -1,11 +1,11 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import { getImage, Image } from 'astro:assets';
-import Base from '../layouts/Base.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
-import CtaTesteGratis from '../components/CtaTesteGratis.astro';
-import PostCard from '../components/PostCard.astro';
-import { site, urlAbsoluta } from '../config/site';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaTesteGratis from '../../components/CtaTesteGratis.astro';
+import PostCard from '../../components/PostCard.astro';
+import { site, urlAbsoluta } from '../../config/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.publicado === true);
@@ -71,6 +71,7 @@ const jsonLd = {
 };
 ---
 <Base
+  tipoPagina="post"
   titulo={post.data.titulo}
   descricao={post.data.descricaoGoogle}
   canonical={canonical}

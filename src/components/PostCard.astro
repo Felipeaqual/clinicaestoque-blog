@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { site } from '../config/site';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const { post, eager = false } = Astro.props;
-const href = import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + post.id + '/';
+const href = `${site.base}/${post.id}/`;
 const data = post.data.dataPublicacao;
 const formatador = new Intl.DateTimeFormat('pt-BR', {
   day: '2-digit',

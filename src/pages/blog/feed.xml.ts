@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { site, urlAbsoluta } from '../config/site';
+import { site, urlAbsoluta } from '../../config/site';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {

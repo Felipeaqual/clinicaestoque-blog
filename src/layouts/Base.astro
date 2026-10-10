@@ -5,8 +5,12 @@ import Footer from '../components/Footer.astro';
 import '../styles/base.css';
 import { site } from '../config/site';
 
+type TipoPagina = 'home' | 'post' | 'paginacao' | '404';
+
 interface Props {
-  titulo: string;
+  tipoPagina: TipoPagina;
+  titulo?: string;
+  numeroPagina?: number;
   descricao: string;
   canonical: string;
   imagem?: string;
@@ -20,12 +24,29 @@ interface Props {
   noindex?: boolean;
 }
 
-const props = Astro.props;
+const { tipoPagina, titulo, numeroPagina, ...rest } = Astro.props;
+
+function montarTitulo(): string {
+  switch (tipoPagina) {
+    case 'home':
+      return site.nome;
+    case 'post':
+      if (!titulo) throw new Error('post exige titulo');
+      return `${titulo} | ${site.nome}`;
+    case 'paginacao':
+      if (!numeroPagina) throw new Error('paginacao exige numeroPagina');
+      return `${site.nome}: página ${numeroPagina}`;
+    case '404':
+      return `Página não encontrada | ${site.nome}`;
+  }
+}
+
+const tituloFinal = montarTitulo();
 ---
 <!doctype html>
 <html lang={site.idioma}>
   <head>
-    <SeoHead {...props} />
+    <SeoHead titulo={tituloFinal} {...rest} />
     <slot name="head" />
   </head>
   <body>

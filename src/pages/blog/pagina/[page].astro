@@ -1,8 +1,8 @@
 ---
-import Base from '../../layouts/Base.astro';
-import PostCard from '../../components/PostCard.astro';
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-import { site, urlAbsoluta } from '../../config/site';
+import { site, urlAbsoluta } from '../../../config/site';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('posts', ({ data }) => data.publicado === true)).sort(
@@ -38,7 +38,8 @@ const proxima =
   paginaAtual < totalPaginas ? `${site.base}/pagina/${paginaAtual + 1}/` : null;
 ---
 <Base
-  titulo={`${site.nome}: página ${paginaAtual}`}
+  tipoPagina="paginacao"
+  numeroPagina={paginaAtual}
   descricao={site.descricao}
   canonical={canonical}
   tipo="website"

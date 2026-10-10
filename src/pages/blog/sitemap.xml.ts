@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { site, urlAbsoluta } from '../config/site';
+import { site, urlAbsoluta } from '../../config/site';
 import type { APIContext } from 'astro';
 
 function escapar(s: string): string {
