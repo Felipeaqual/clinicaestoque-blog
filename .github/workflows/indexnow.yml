@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          BASE="https://clinicaestoque.com.br/blog"
+          BASE="https://www.clinicaestoque.com.br/blog"
           KEY="cE2026blog9f4ab17a2ce14d9e9b4a5d2e8f1c7a06"
           KEY_LOCATION="${BASE}/${KEY}.txt"
 
@@ -65,7 +65,7 @@ jobs:
           # Monta JSON payload do IndexNow.
           JSON=$(printf '%s\n' "${URLS[@]}" | awk -v key="${KEY}" -v loc="${KEY_LOCATION}" '
             BEGIN {
-              printf "{\"host\":\"clinicaestoque.com.br\",\"key\":\"%s\",\"keyLocation\":\"%s\",\"urlList\":[", key, loc;
+              printf "{\"host\":\"www.clinicaestoque.com.br\",\"key\":\"%s\",\"keyLocation\":\"%s\",\"urlList\":[", key, loc;
               sep=""
             }
             { gsub(/"/, "\\\""); printf "%s\"%s\"", sep, $0; sep="," }

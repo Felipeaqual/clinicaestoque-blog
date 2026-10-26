@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 import keystatic from '@keystatic/astro';
 
 export default defineConfig({
-  site: 'https://clinicaestoque.com.br',
+  site: 'https://www.clinicaestoque.com.br',
   trailingSlash: 'ignore',
   output: 'static',
   adapter: vercel({
